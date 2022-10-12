@@ -1,0 +1,53 @@
+name: 'Setup SSH authentication'
+description: 'Installs your private key and related files in ~/.ssh to allow an SSH key-based authentication.'
+author: 'Benoît Chantre'
+
+inputs:
+  private-key:
+    description: 'SSH private key'
+    required: true
+  private-key-name:
+    description: 'SSH key filename (default: id_rsa)'
+    required: false
+    default: 'id_rsa'
+  ssh-config:
+    description: 'Content of `~/.ssh/config` file'
+    required: false
+    default: ''
+  known-hosts:
+    description: 'Content of `~/.ssh/known_hosts` file'
+    required: true
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Add .ssh directory
+      run: |
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+      shell: bash
+
+    - name: Copy private key
+      run: |
+        echo "${{ inputs.private-key }}" > ~/.ssh/${{ inputs.private-key-name }}
+        chmod 400 ~/.ssh/${{ inputs.private-key-name }}
+      shell: bash
+
+    - name: Copy config
+      if: inputs.ssh-config != ''
+      run: |
+        echo "${{ inputs.ssh-config }}" >> ~/.ssh/config
+        chmod 644 ~/.ssh/config
+      shell: bash
+
+    - name: Copy known_hosts
+      if: inputs.known-hosts != ''
+      run: |
+        echo "${{ inputs.known-hosts }}" >> ~/.ssh/known_hosts
+        chmod 644 ~/.ssh/known_hosts
+      shell: bash
+
+branding:
+  icon: 'terminal'
+  color: 'gray-dark'
