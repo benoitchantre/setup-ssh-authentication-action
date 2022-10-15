@@ -6,7 +6,7 @@ This action installs your private key and related files in `~/.ssh` to allow an 
 
 ```yaml
 - name: Setup SSH key
-  uses: benoitchantre/setup-ssh-authentication-action@v1
+  uses: benoitchantre/setup-ssh-authentication-action@1.0.0
   with:
     # Private key for connecting to remote hosts.
     # Required.
