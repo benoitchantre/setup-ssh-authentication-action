@@ -22,30 +22,41 @@ inputs:
 runs:
   using: composite
   steps:
+    # Inside a docker container running as root, $HOME equals to /github/home instead of /root
+    - name: Get home directory
+      id: home-directory
+      run: |
+        if [[ $HOME == '/github/home' ]]; then
+          echo "path=/root" >> $GITHUB_OUTPUT
+        else
+          echo "path=$HOME" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
     - name: Add .ssh directory
       run: |
-        mkdir -p ~/.ssh
-        chmod 700 ~/.ssh
+        mkdir -p ${{ steps.home-directory.outputs.path }}/.ssh
+        chmod 700 ${{ steps.home-directory.outputs.path }}/.ssh
       shell: bash
 
     - name: Copy private key
       run: |
-        echo "${{ inputs.private-key }}" > ~/.ssh/${{ inputs.private-key-name }}
-        chmod 400 ~/.ssh/${{ inputs.private-key-name }}
+        echo "${{ inputs.private-key }}" > ${{ steps.home-directory.outputs.path }}/.ssh/${{ inputs.private-key-name }}
+        chmod 400 ${{ steps.home-directory.outputs.path }}/.ssh/${{ inputs.private-key-name }}
       shell: bash
 
     - name: Copy config
       if: inputs.ssh-config != ''
       run: |
-        echo "${{ inputs.ssh-config }}" >> ~/.ssh/config
-        chmod 644 ~/.ssh/config
+        echo "${{ inputs.ssh-config }}" >> ${{ steps.home-directory.outputs.path }}/.ssh/config
+        chmod 644 ${{ steps.home-directory.outputs.path }}/.ssh/config
       shell: bash
 
     - name: Copy known_hosts
       if: inputs.known-hosts != ''
       run: |
-        echo "${{ inputs.known-hosts }}" >> ~/.ssh/known_hosts
-        chmod 644 ~/.ssh/known_hosts
+        echo "${{ inputs.known-hosts }}" >> ${{ steps.home-directory.outputs.path }}/.ssh/known_hosts
+        chmod 644 ${{ steps.home-directory.outputs.path }}/.ssh/known_hosts
       shell: bash
 
 branding:
