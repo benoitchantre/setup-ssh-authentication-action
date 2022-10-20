@@ -20,33 +20,33 @@ inputs:
     default: ''
 
 runs:
-  using: composite
+  using: 'composite'
   steps:
-    - name: Add .ssh directory
+    - name: 'Add .ssh directory'
       run: |
         mkdir -p ~/.ssh
         chmod 0700 ~/.ssh
       shell: bash
 
-    - name: Copy private key
+    - name: 'Copy private key'
+      shell: 'bash'
       run: |
         echo "${{ inputs.private-key }}" > ~/.ssh/${{ inputs.private-key-name }}
         chmod 0400 ~/.ssh/${{ inputs.private-key-name }}
-      shell: bash
 
-    - name: Copy config
-      if: inputs.ssh-config != ''
+    - name: 'Copy config'
+      if: "${{ inputs.ssh-config != '' }}"
+      shell: 'bash'
       run: |
         echo "${{ inputs.ssh-config }}" >> ~/.ssh/config
         chmod 0644 ~/.ssh/config
-      shell: bash
 
-    - name: Copy known_hosts
-      if: inputs.known-hosts != ''
+    - name: 'Copy known_hosts'
+      if: "${{ inputs.known-hosts != '' }}"
+      shell: 'bash'
       run: |
         echo "${{ inputs.known-hosts }}" >> ~/.ssh/known_hosts
         chmod 0644 ~/.ssh/known_hosts
-      shell: bash
 
 branding:
   icon: 'terminal'
