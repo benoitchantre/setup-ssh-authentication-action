@@ -25,27 +25,27 @@ runs:
     - name: Add .ssh directory
       run: |
         mkdir -p ~/.ssh
-        chmod 700 ~/.ssh
+        chmod 0700 ~/.ssh
       shell: bash
 
     - name: Copy private key
       run: |
         echo "${{ inputs.private-key }}" > ~/.ssh/${{ inputs.private-key-name }}
-        chmod 400 ~/.ssh/${{ inputs.private-key-name }}
+        chmod 0400 ~/.ssh/${{ inputs.private-key-name }}
       shell: bash
 
     - name: Copy config
       if: inputs.ssh-config != ''
       run: |
         echo "${{ inputs.ssh-config }}" >> ~/.ssh/config
-        chmod 644 ~/.ssh/config
+        chmod 0644 ~/.ssh/config
       shell: bash
 
     - name: Copy known_hosts
       if: inputs.known-hosts != ''
       run: |
         echo "${{ inputs.known-hosts }}" >> ~/.ssh/known_hosts
-        chmod 644 ~/.ssh/known_hosts
+        chmod 0644 ~/.ssh/known_hosts
       shell: bash
 
 branding:
