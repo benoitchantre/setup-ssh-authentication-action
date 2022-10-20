@@ -34,7 +34,7 @@ runs:
         echo "${{ inputs.private-key }}" > ~/.ssh/${{ inputs.private-key-name }}
         chmod 0400 ~/.ssh/${{ inputs.private-key-name }}
 
-    - name: Copy config
+    - name: 'Copy config'
       if: "${{ inputs.ssh-config != '' }}"
       shell: 'bash'
       run: |
