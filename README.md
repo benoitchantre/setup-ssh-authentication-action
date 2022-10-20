@@ -8,7 +8,7 @@ This action installs your private key and related files in `~/.ssh` to allow an 
 - name: Setup SSH key
   uses: benoitchantre/setup-ssh-authentication-action@1.0.0
   with:
-    # Private key for connecting to remote hosts.
+    # PEM encoded private key for connecting to remote hosts.
     # Required.
     private-key: ${{ secrets.PRIVATE_KEY }}
 
